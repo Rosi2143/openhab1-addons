@@ -2238,11 +2238,11 @@ achieve this, you have to configure the device as String item.
 What’s the meaning of this magic string?
 
 ```
-TF_LCD.sendCommand(String::format("TFNUM<213>%4s"Barometer.state.format("%d")))
+TF_LCD.sendCommand(String::format("2,13,%4s"Barometer.state.format("%d")))
 ```
 
-TFNUM is just a flag to signal the binding that some position information is passed. The first
-number is the line number, starting from 0. The second and third number are interpreted as the
+The string has to start with 2 numbers that signal the binding that some position information is passed. The first
+number is the line number, starting from 0. The second number is interpreted as the 
 position in the line, starting from 0.
 
 The above example would write the current value of the barometer bricklet to line 3 starting from
@@ -2302,18 +2302,18 @@ when
         System started
 then
     createTimer(now.plusSeconds(initialSleepTime)) [|
-        TF_LCD.sendCommand("TFNUM<00>Temperature:       C")
-        TF_LCD.sendCommand("TFNUM<10>Humidity   :       %")
-        TF_LCD.sendCommand("TFNUM<20>Pressure   :     hPa")
-        TF_LCD.sendCommand("TFNUM<30>Luminance  :     Lux")
+        TF_LCD.sendCommand("0,0,Temperature:       C")
+        TF_LCD.sendCommand("1,0,Humidity   :       %")
+        TF_LCD.sendCommand("2,0,Pressure   :     hPa")
+        TF_LCD.sendCommand("3,0,Luminance  :     Lux")
         TF_LCDBacklight.sendCommand(ON)
-        TF_LCD.sendCommand(String::format("TFNUM<013>%4s",
+        TF_LCD.sendCommand(String::format("0,13,%4s",
                                 TF_Barometer_Temperature.state.format("%.1f")))
-        TF_LCD.sendCommand(String::format("TFNUM<113>%4s",
+        TF_LCD.sendCommand(String::format("1,13,%4s",
                                 TF_Humdity.state.format("%.1f")))
-        TF_LCD.sendCommand(String::format("TFNUM<213>%4s",
+        TF_LCD.sendCommand(String::format("2,13,%4s",
                                   TF_Barometer.state.format("%.0f")))
-        TF_LCD.sendCommand(String::format("TFNUM<313>%4s",
+        TF_LCD.sendCommand(String::format("3,13,%4s",
                                 TF_AmbientLight.state.format("%.0f")))
     ]
 
@@ -2341,7 +2341,7 @@ rule "Weatherstation LCD update temperature"
         when
                 Item TF_Barometer_Temperature received update
         then
-                TF_LCD.sendCommand(String::format("TFNUM<013>%4s",
+                TF_LCD.sendCommand(String::format("0,13,%4s",
                                 TF_Barometer_Temperature.state.format("%.1f")
                         ))
 end
@@ -2350,7 +2350,7 @@ rule "Weatherstation LCD update humidity"
         when
                 Item TF_Humdity received update
         then
-                TF_LCD.sendCommand(String::format("TFNUM<113>%4s",
+                TF_LCD.sendCommand(String::format("1,13,%4s",
                                 TF_Humdity.state.format("%.1f")
                             ))
 end
@@ -2358,7 +2358,7 @@ rule "Weatherstation LCD update airpressure"
         when
                 Item TF_Barometer received update
         then
-                TF_LCD.sendCommand(String::format("TFNUM<213>%4s",
+                TF_LCD.sendCommand(String::format("2,13,%4s",
                                   TF_Barometer.state.format("%.0f")
                                   ))
 end
@@ -2366,7 +2366,7 @@ rule "Weatherstation LCD update ambientLight"
         when
                 Item TF_AmbientLight received update
         then
-                TF_LCD.sendCommand(String::format("TFNUM<313>%4s",
+                TF_LCD.sendCommand(String::format("3,13,%4s",
                                 TF_AmbientLight.state.format("%.0f")
                                 ))
 end
@@ -3667,21 +3667,21 @@ when
     Item TF_LCDBacklight changed or System started
 then
     createTimer(now.plusSeconds(initialSleepTime)) [|
-        TF_LCD.sendCommand("TFNUM<00>Temperature:")
-        TF_LCD.sendCommand("TFNUM<019>C")
-        TF_LCD.sendCommand("TFNUM<10>Humidity   :")
-        TF_LCD.sendCommand("TFNUM<119>%")
-        TF_LCD.sendCommand("TFNUM<20>Pressure   :")
-        TF_LCD.sendCommand("TFNUM<217>hPa")
-        TF_LCD.sendCommand("TFNUM<30>Luminance  :")
-        TF_LCD.sendCommand("TFNUM<317>Lux")
-        TF_LCD.sendCommand(String::format("TFNUM<013>%4s", 
+        TF_LCD.sendCommand("0,0,Temperature:")
+        TF_LCD.sendCommand("0,19,C")
+        TF_LCD.sendCommand("1,0,Humidity   :")
+        TF_LCD.sendCommand("1,19,%")
+        TF_LCD.sendCommand("2,0,Pressure   :")
+        TF_LCD.sendCommand("2,17,hPa")
+        TF_LCD.sendCommand("3,0,Luminance  :")
+        TF_LCD.sendCommand("3,17,Lux")
+        TF_LCD.sendCommand(String::format("0,13,%4s", 
                                 TF_Barometer_Temperature.state.format("%.1f")))
-        TF_LCD.sendCommand(String::format("TFNUM<113>%4s", 
+        TF_LCD.sendCommand(String::format("1,13,%4s", 
                                 TF_Humdity.state.format("%.1f")))
-        TF_LCD.sendCommand(String::format("TFNUM<213>%4s",
+        TF_LCD.sendCommand(String::format("2,13,%4s",
                                   TF_Barometer.state.format("%.0f")))
-        TF_LCD.sendCommand(String::format("TFNUM<313>%4s", 
+        TF_LCD.sendCommand(String::format("3,13,%4s", 
                                 TF_AmbientLight.state.format("%.0f")))
     ]
 
@@ -3708,7 +3708,7 @@ rule "Weatherstation LCD update temperature"
     when
         Item TF_Barometer_Temperature received update
     then
-        TF_LCD.sendCommand(String::format("TFNUM<013>%4s",
+        TF_LCD.sendCommand(String::format("0,13,%4s",
             TF_Barometer_Temperature.state.format("%.1f")))
 end
 
@@ -3716,21 +3716,21 @@ rule "Weatherstation LCD update humidity"
     when
         Item TF_Humdity received update
     then
-        TF_LCD.sendCommand(String::format("TFNUM<113>%4s",
+        TF_LCD.sendCommand(String::format("1,13,%4s",
             TF_Humdity.state.format("%.1f")))
 end
 rule "Weatherstation LCD update airpressure"
     when
         Item TF_Barometer received update
     then
-        TF_LCD.sendCommand(String::format("TFNUM<213>%4s",
+        TF_LCD.sendCommand(String::format("2,13,%4s",
             TF_Barometer.state.format("%.0f")))
 end
 rule "Weatherstation LCD update ambientLight"
     when
         Item TF_AmbientLight received update
     then
-        TF_LCD.sendCommand(String::format("TFNUM<313>%4s",
+        TF_LCD.sendCommand(String::format("3,13,%4s",
             TF_AmbientLight.state.format("%.0f")))
 end
 ```
